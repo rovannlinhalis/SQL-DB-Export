@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using FirebirdSql.Data.FirebirdClient;
 
-namespace FirebirdExport
+namespace DBSQLExport
 {
     public partial class Form1 : Form
     {
@@ -27,31 +28,151 @@ namespace FirebirdExport
             return $"User={textBoxUsuario.Text};Password={textBoxSenha.Text};Database={textBoxDatabase.Text};DataSource={textBoxServidor.Text};Port={textBoxPorta.Text};Dialect={textBoxDialect.Text};Charset={textBoxCharSet.Text};Role=;Connection lifetime=15;Pooling=true;MinPoolSize=0;MaxPoolSize=50;Packet Size=8192;";
         }
 
-        private async void buttonConectar_Click(object sender, EventArgs e)
+        public static IDbConnection GetConnection(BancosDeDados db, string user, string database, string host, string senha, string porta, string dialect, string charset)
+        {
+            IDbConnection conexao = null;
+            if (db == BancosDeDados.FireBird)
+            {
+                //conexao = new FirebirdSql.Data.FirebirdClient.FbConnection("User=" + emp.DbUser + ";Password=" + emp.DbSenha + ";Database=" + emp.DbDataBase + ";DataSource=" + emp.DbHost + ";Port=" + emp.DbPorta + ";Dialect=3;Charset=NONE;Role=;Connection lifetime=15;Pooling=true;MinPoolSize=0;MaxPoolSize=50;Packet Size=8192;ServerType=0;");
+                //conexao = new FirebirdSql.Data.FirebirdClient.FbConnection($"User={user};Password={senha};Database={bd};DataSource={host};Port={porta};Dialect={dialect};Charset={charset};Role=;Connection lifetime=15;Pooling=true;MinPoolSize=0;MaxPoolSize=50;Packet Size=8192;");
+                conexao = new FirebirdSql.Data.FirebirdClient.FbConnection("User=" + user + ";Password=" +senha + ";Database=" + database + ";DataSource=" + host + ";Port=" + porta+ ";Dialect=3;Charset=NONE;Role=;Connection lifetime=15;Pooling=true;MinPoolSize=0;MaxPoolSize=50;Packet Size=8192;ServerType=0;");
+            }
+            else if (db == BancosDeDados.SQLServer)
+            {
+                conexao = new System.Data.SqlClient.SqlConnection("Server=" + host + "," + porta + ";Database=" + database + ";User Id=" + user + ";Password=" + senha + ";");
+            }
+            else if (db == BancosDeDados.MySQL)
+            {
+                conexao = new MySql.Data.MySqlClient.MySqlConnection("Server=" + host + ";Port=" + porta + ";Database=" + database + ";Uid=" + user + ";Pwd=" + senha + ";");
+            }
+            else if (db == BancosDeDados.PostgreSQL)
+            {
+                conexao = new Npgsql.NpgsqlConnection("Server=" + host + ";Port=" + porta + ";Database=" + database + ";User Id=" + user + ";Password=" + senha + ";");
+            }
+            else if (db == BancosDeDados.ODBC)
+            {
+                conexao = new System.Data.Odbc.OdbcConnection("DNS=" + host);
+            }
+
+            return conexao;
+        }
+        public static IDbCommand GetCommand(BancosDeDados db, string query)
+        {
+            IDbCommand cmd = null;
+            if (db == BancosDeDados.FireBird)
+            {
+                cmd = new FirebirdSql.Data.FirebirdClient.FbCommand(query);
+            }
+            else if (db == BancosDeDados.SQLServer)
+            {
+                cmd = new System.Data.SqlClient.SqlCommand(query);
+            }
+            else if (db == BancosDeDados.MySQL)
+            {
+                cmd = new MySql.Data.MySqlClient.MySqlCommand(query);
+            }
+            else if (db == BancosDeDados.PostgreSQL)
+            {
+                cmd = new Npgsql.NpgsqlCommand(query);
+            }
+            else if (db == BancosDeDados.ODBC)
+            {
+                cmd = new System.Data.Odbc.OdbcCommand(query);
+            }
+            return cmd;
+        }
+        public static IDbDataAdapter GetDbAdaptaer(BancosDeDados db,  IDbCommand cmd)
+        {
+            IDbDataAdapter da = null;
+            if (db == BancosDeDados.FireBird)
+            {
+                da = new FirebirdSql.Data.FirebirdClient.FbDataAdapter((FbCommand)cmd);
+            }
+            else if (db == BancosDeDados.SQLServer)
+            {
+                da = new System.Data.SqlClient.SqlDataAdapter((SqlCommand)cmd);
+            }
+            else if (db == BancosDeDados.MySQL)
+            {
+                da = new MySql.Data.MySqlClient.MySqlDataAdapter((MySql.Data.MySqlClient.MySqlCommand)cmd);
+            }
+            else if (db == BancosDeDados.PostgreSQL)
+            {
+                da = new Npgsql.NpgsqlDataAdapter((Npgsql.NpgsqlCommand)cmd);
+            }
+            else if (db == BancosDeDados.ODBC)
+            {
+                da = new System.Data.Odbc.OdbcDataAdapter((System.Data.Odbc.OdbcCommand)cmd);
+            }
+            return da;
+        }
+        public static string GetSQLTables(BancosDeDados db, string schema)
+        {
+            if (db == BancosDeDados.FireBird)
+            {
+                return @"SELECT RDB$RELATION_NAME FROM RDB$RELATIONS
+WHERE (RDB$SYSTEM_FLAG <> 1 OR RDB$SYSTEM_FLAG IS NULL) AND RDB$VIEW_BLR IS NULL
+ORDER BY RDB$RELATION_NAME;";
+            }
+            else if (db == BancosDeDados.SQLServer)
+            {
+                return @"SELECT TABLE_NAME
+FROM INFORMATION_SCHEMA.TABLES
+WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_CATALOG='"+ schema + "'";
+
+            }
+            else if (db == BancosDeDados.MySQL)
+            {
+                return @"SELECT TABLE_NAME 
+FROM INFORMATION_SCHEMA.TABLES
+WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA='" + schema + "';";
+
+            }
+            else if (db == BancosDeDados.PostgreSQL)
+            {
+                return @"SELECT table_name FROM information_schema.tables WHERE table_type ='BASE TABLE' and table_schema='" + schema+"';";
+
+            }
+            else // (db == BancosDeDados.ODBC)
+            {
+                return @"";
+
+            }
+        }
+
+        private  void buttonConectar_Click(object sender, EventArgs e)
         {
             try
             {
+                listBox1.DataSource = null;
+                BancosDeDados sgdb = (BancosDeDados)comboBoxSGDB.SelectedItem;
                 //User=SYSDBA;Password=MASTERKEY;Database=D:\Base_Clientes\Michel\ECONTAB.FDB;DataSource=localhost;Port=3050;Dialect=3;Charset=NONE;Role=;Connection lifetime=15;Pooling=true;MinPoolSize=0;MaxPoolSize=50;Packet Size=8192;
                 //WIN1252
                 //User=SYSDBA;Password=MASTERKEY;Database=D:\Base_Clientes\Michel\ECONTAB.FDB;DataSource=localhost;Port=3050;Dialect=3;Charset=ISO8859_1;Role=;Connection lifetime=15;Pooling=true;MinPoolSize=0;MaxPoolSize=50;Packet Size=8192;
                 listTables.Clear();
                 string conn = GetConnectionString();
-                using (FbConnection conexao = new FbConnection(conn))
+                using (IDbConnection conexao = GetConnection(sgdb, textBoxUsuario.Text, textBoxDatabase.Text, textBoxServidor.Text, textBoxSenha.Text, textBoxPorta.Text, textBoxDialect.Text, textBoxCharSet.Text))
                 {
-                    await conexao.OpenAsync();
-
-                    string sqlTables = @"SELECT RDB$RELATION_NAME FROM RDB$RELATIONS
-WHERE (RDB$SYSTEM_FLAG <> 1 OR RDB$SYSTEM_FLAG IS NULL) AND RDB$VIEW_BLR IS NULL
-ORDER BY RDB$RELATION_NAME;";
+                    conexao.Open();
 
 
-                    using (FbCommand cmd = new FbCommand(sqlTables, conexao))
+                    string sqlTables = GetSQLTables(sgdb, sgdb == BancosDeDados.PostgreSQL ? "public" : textBoxDatabase.Text);
+
+
+                    using (IDbCommand cmd = GetCommand(sgdb, sqlTables)) // new FbCommand(sqlTables, conexao))
                     {
-                        using (IDataReader dr = await cmd.ExecuteReaderAsync())
+                        if (cmd != null)
                         {
-                            while (dr.Read())
+                            cmd.Connection = conexao;
+
+
+
+                            using (IDataReader dr = cmd.ExecuteReader())
                             {
-                                listTables.Add(dr.GetString(0)?.Trim());
+                                while (dr.Read())
+                                {
+                                    listTables.Add(dr.GetString(0)?.Trim());
+                                }
                             }
                         }
                     }
@@ -76,7 +197,10 @@ ORDER BY RDB$RELATION_NAME;";
         {
             try
             {
-                Parallel.ForEach(listTables, table => { ExportarTabela(table); });
+                BancosDeDados sgdb = (BancosDeDados)comboBoxSGDB.SelectedItem;
+
+
+                Parallel.ForEach(listTables, table => { ExportarTabela(table, sgdb); });
                 labelStatus.Text = "Tabelas Exportadas com sucesso";
             }
             catch (Exception ex)
@@ -85,48 +209,55 @@ ORDER BY RDB$RELATION_NAME;";
             }
         }
 
-        private async void ExportarTabela(string table)
+        private  void ExportarTabela(string table, BancosDeDados sgdb)
         {
-            using (FbConnection conexao = new FbConnection(GetConnectionString()))
+           
+            using (IDbConnection conexao = GetConnection(sgdb, textBoxUsuario.Text, textBoxDatabase.Text, textBoxServidor.Text, textBoxSenha.Text, textBoxPorta.Text, textBoxDialect.Text, textBoxCharSet.Text)) // new FbConnection(GetConnectionString()))
             {
-                await conexao.OpenAsync();
+                conexao.Open();
                 DataSet ds = new DataSet();
                 string sql = @"select * from " + table;
-                using (FbCommand cmd = new FbCommand(sql, conexao))
+                using (IDbCommand cmd = GetCommand(sgdb, sql))// new FbCommand(sql, conexao))
                 {
-                    FileInfo fileSaida = new FileInfo(Path.Combine(textBoxPastaExportar.Text,table + ".csv"));
-                    if (!fileSaida.Directory.Exists)
-                        fileSaida.Directory.Create();
-
-                    if (fileSaida.Exists)
-                        fileSaida.Delete();
-
-                    string s = textBoxSeparador.Text;
-                    using (TextWriter tw = new StreamWriter(fileSaida.FullName, false, Encoding.Default))
+                    if (cmd != null)
                     {
-                        using (IDataReader dr = await cmd.ExecuteReaderAsync())
-                        {
-                            for (int i = 0; i < dr.FieldCount; i++)
-                            {
-                                tw.Write(dr.GetName(i) + s);
-                            }
-                            tw.WriteLine();
 
-                            while (dr.Read())
+                        cmd.Connection = conexao;
+
+                        FileInfo fileSaida = new FileInfo(Path.Combine(textBoxPastaExportar.Text, table + ".csv"));
+                        if (!fileSaida.Directory.Exists)
+                            fileSaida.Directory.Create();
+
+                        if (fileSaida.Exists)
+                            fileSaida.Delete();
+
+                        string s = textBoxSeparador.Text;
+                        using (TextWriter tw = new StreamWriter(fileSaida.FullName, false, Encoding.Default))
+                        {
+                            using (IDataReader dr =  cmd.ExecuteReader())
                             {
                                 for (int i = 0; i < dr.FieldCount; i++)
                                 {
-                                    if (dr.IsDBNull(i) || dr[i] == null)
-                                        tw.Write("" + s);
-                                    else
-                                        tw.Write(dr[i].ToString().Replace("\r", "").Replace("\n", "") + s);
+                                    tw.Write(dr.GetName(i) + s);
                                 }
                                 tw.WriteLine();
+
+                                while (dr.Read())
+                                {
+                                    for (int i = 0; i < dr.FieldCount; i++)
+                                    {
+                                        //if (dr[i] == null || dr.IsDBNull(i))
+                                        //    tw.Write("" + s);
+                                        //else
+                                            tw.Write((dr[i]?.ToString().Replace("\r", "").Replace("\n", "") ?? "") + s);
+                                    }
+                                    tw.WriteLine();
+                                }
                             }
+
+                            tw.Close();
+
                         }
-
-                        tw.Close();
-
                     }
                 }
             }
@@ -164,7 +295,8 @@ ORDER BY RDB$RELATION_NAME;";
             {
                 try
                 {
-                    ExportarTabela(table);
+                    BancosDeDados sgdb = (BancosDeDados)comboBoxSGDB.SelectedItem;
+                    ExportarTabela(table, sgdb);
                     labelStatus.Text = "Tabela exportada com sucesso";
 
                 }
@@ -193,25 +325,28 @@ ORDER BY RDB$RELATION_NAME;";
             
         }
 
-        private async void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
             {
+                BancosDeDados sgdb = (BancosDeDados)comboBoxSGDB.SelectedItem;
 
 
                 string table = listBox1.SelectedItem?.ToString();
                 if (!String.IsNullOrWhiteSpace(table))
                 {
                     DataSet ds = new DataSet();
-                    using (FbConnection conexao = new FbConnection(GetConnectionString()))
+                    using (IDbConnection conexao = GetConnection(sgdb, textBoxUsuario.Text, textBoxDatabase.Text, textBoxServidor.Text, textBoxSenha.Text, textBoxPorta.Text, textBoxDialect.Text, textBoxCharSet.Text)) // new FbConnection(GetConnectionString()))
                     {
-                        await conexao.OpenAsync();
+                        conexao.Open();
 
                         string sql = @"select * from " + table;
-                        using (FbCommand cmd = new FbCommand(sql, conexao))
+                        using (IDbCommand cmd = GetCommand(sgdb, sql)) // new FbCommand(sql, conexao))
                         {
-                            using (FbDataAdapter da = new FbDataAdapter(cmd))
+                            if (cmd != null)
                             {
+                                cmd.Connection = conexao;
+                                IDbDataAdapter da = GetDbAdaptaer(sgdb, cmd);
                                 da.Fill(ds);
                             }
                         }
@@ -231,5 +366,10 @@ ORDER BY RDB$RELATION_NAME;";
             }
         }
 
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            comboBoxSGDB.DataSource = Enum.GetValues(typeof(BancosDeDados));
+
+        }
     }
 }

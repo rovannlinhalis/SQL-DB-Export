@@ -1,5 +1,5 @@
 ﻿
-namespace FirebirdExport
+namespace DBSQLExport
 {
     partial class Form1
     {
@@ -59,6 +59,8 @@ namespace FirebirdExport
             this.label8 = new System.Windows.Forms.Label();
             this.textBoxSeparador = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.label10 = new System.Windows.Forms.Label();
+            this.comboBoxSGDB = new System.Windows.Forms.ComboBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -70,6 +72,8 @@ namespace FirebirdExport
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.label10);
+            this.panel1.Controls.Add(this.comboBoxSGDB);
             this.panel1.Controls.Add(this.labelStatus);
             this.panel1.Controls.Add(this.buttonAbrirArquivo);
             this.panel1.Controls.Add(this.label7);
@@ -109,7 +113,7 @@ namespace FirebirdExport
             this.buttonAbrirArquivo.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.buttonAbrirArquivo.FlatAppearance.BorderSize = 2;
             this.buttonAbrirArquivo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonAbrirArquivo.Image = global::FirebirdExport.Properties.Resources.opened_folder_24;
+            this.buttonAbrirArquivo.Image = global::DBSQLExport.Properties.Resources.opened_folder_24;
             this.buttonAbrirArquivo.Location = new System.Drawing.Point(342, 66);
             this.buttonAbrirArquivo.Margin = new System.Windows.Forms.Padding(4);
             this.buttonAbrirArquivo.Name = "buttonAbrirArquivo";
@@ -256,9 +260,9 @@ namespace FirebirdExport
             this.buttonConectar.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.buttonConectar.FlatAppearance.BorderSize = 2;
             this.buttonConectar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonConectar.Image = global::FirebirdExport.Properties.Resources.connected_48;
+            this.buttonConectar.Image = global::DBSQLExport.Properties.Resources.connected_48;
             this.buttonConectar.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonConectar.Location = new System.Drawing.Point(501, 12);
+            this.buttonConectar.Location = new System.Drawing.Point(920, 10);
             this.buttonConectar.Margin = new System.Windows.Forms.Padding(4);
             this.buttonConectar.Name = "buttonConectar";
             this.buttonConectar.Padding = new System.Windows.Forms.Padding(15, 0, 50, 0);
@@ -274,7 +278,7 @@ namespace FirebirdExport
             this.buttonExportarTodasTabelas.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.buttonExportarTodasTabelas.FlatAppearance.BorderSize = 2;
             this.buttonExportarTodasTabelas.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonExportarTodasTabelas.Image = global::FirebirdExport.Properties.Resources.symlink_directory_48;
+            this.buttonExportarTodasTabelas.Image = global::DBSQLExport.Properties.Resources.symlink_directory_48;
             this.buttonExportarTodasTabelas.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonExportarTodasTabelas.Location = new System.Drawing.Point(831, 8);
             this.buttonExportarTodasTabelas.Margin = new System.Windows.Forms.Padding(4);
@@ -352,7 +356,7 @@ namespace FirebirdExport
             this.button2.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.button2.FlatAppearance.BorderSize = 2;
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button2.Image = global::FirebirdExport.Properties.Resources.opened_folder_24;
+            this.button2.Image = global::DBSQLExport.Properties.Resources.opened_folder_24;
             this.button2.Location = new System.Drawing.Point(379, 14);
             this.button2.Margin = new System.Windows.Forms.Padding(4);
             this.button2.Name = "button2";
@@ -404,7 +408,7 @@ namespace FirebirdExport
             this.button1.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.button1.FlatAppearance.BorderSize = 2;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Image = global::FirebirdExport.Properties.Resources.symlink_directory_48;
+            this.button1.Image = global::DBSQLExport.Properties.Resources.symlink_directory_48;
             this.button1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.button1.Location = new System.Drawing.Point(539, 8);
             this.button1.Margin = new System.Windows.Forms.Padding(4);
@@ -416,6 +420,26 @@ namespace FirebirdExport
             this.button1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.buttonExportarSelecionada_Click);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(501, 52);
+            this.label10.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(98, 17);
+            this.label10.TabIndex = 18;
+            this.label10.Text = "Driver Conexão";
+            // 
+            // comboBoxSGDB
+            // 
+            this.comboBoxSGDB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxSGDB.FormattingEnabled = true;
+            this.comboBoxSGDB.Location = new System.Drawing.Point(501, 74);
+            this.comboBoxSGDB.Margin = new System.Windows.Forms.Padding(4);
+            this.comboBoxSGDB.Name = "comboBoxSGDB";
+            this.comboBoxSGDB.Size = new System.Drawing.Size(196, 23);
+            this.comboBoxSGDB.TabIndex = 19;
             // 
             // Form1
             // 
@@ -430,7 +454,8 @@ namespace FirebirdExport
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
-            this.Text = "Firebird Export Tool";
+            this.Text = "DB SQL Export Tool";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
@@ -475,6 +500,8 @@ namespace FirebirdExport
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox textBoxSeparador;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.ComboBox comboBoxSGDB;
     }
 }
 
