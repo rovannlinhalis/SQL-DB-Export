@@ -165,6 +165,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="database_firebird.ico" />
+    <None Include="Resources\arrowright.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

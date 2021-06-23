@@ -31,8 +31,11 @@ namespace DBSQLExport
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.panel1 = new System.Windows.Forms.Panel();
+            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.label10 = new System.Windows.Forms.Label();
+            this.comboBoxSGDB = new System.Windows.Forms.ComboBox();
             this.labelStatus = new System.Windows.Forms.Label();
-            this.buttonAbrirArquivo = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.textBoxCharSet = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -47,20 +50,22 @@ namespace DBSQLExport
             this.textBoxSenha = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.textBoxUsuario = new System.Windows.Forms.TextBox();
-            this.buttonConectar = new System.Windows.Forms.Button();
-            this.buttonExportarTodasTabelas = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.listBox1 = new System.Windows.Forms.ListBox();
+            this.textBoxSQLQuery = new System.Windows.Forms.TextBox();
             this.dataGridViewDados = new System.Windows.Forms.DataGridView();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.button2 = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
             this.textBoxPastaExportar = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.textBoxSeparador = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.label10 = new System.Windows.Forms.Label();
-            this.comboBoxSGDB = new System.Windows.Forms.ComboBox();
+            this.buttonExecutaQuery = new System.Windows.Forms.Button();
+            this.buttonAbrirArquivo = new System.Windows.Forms.Button();
+            this.buttonConectar = new System.Windows.Forms.Button();
+            this.buttonSQLQuery = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.buttonTabela = new System.Windows.Forms.Button();
+            this.buttonExportarTodasTabelas = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -72,6 +77,9 @@ namespace DBSQLExport
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.buttonExecutaQuery);
+            this.panel1.Controls.Add(this.radioButton2);
+            this.panel1.Controls.Add(this.radioButton1);
             this.panel1.Controls.Add(this.label10);
             this.panel1.Controls.Add(this.comboBoxSGDB);
             this.panel1.Controls.Add(this.labelStatus);
@@ -95,32 +103,62 @@ namespace DBSQLExport
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Margin = new System.Windows.Forms.Padding(4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1126, 132);
+            this.panel1.Size = new System.Drawing.Size(1126, 152);
             this.panel1.TabIndex = 0;
+            // 
+            // radioButton2
+            // 
+            this.radioButton2.AutoSize = true;
+            this.radioButton2.Location = new System.Drawing.Point(79, 107);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(88, 21);
+            this.radioButton2.TabIndex = 21;
+            this.radioButton2.Text = "SQL Query";
+            this.radioButton2.UseVisualStyleBackColor = true;
+            this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            // 
+            // radioButton1
+            // 
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Checked = true;
+            this.radioButton1.Location = new System.Drawing.Point(3, 107);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(70, 21);
+            this.radioButton1.TabIndex = 20;
+            this.radioButton1.TabStop = true;
+            this.radioButton1.Text = "Tabelas";
+            this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(501, 52);
+            this.label10.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(98, 17);
+            this.label10.TabIndex = 18;
+            this.label10.Text = "Driver Conexão";
+            // 
+            // comboBoxSGDB
+            // 
+            this.comboBoxSGDB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxSGDB.FormattingEnabled = true;
+            this.comboBoxSGDB.Location = new System.Drawing.Point(501, 74);
+            this.comboBoxSGDB.Margin = new System.Windows.Forms.Padding(4);
+            this.comboBoxSGDB.Name = "comboBoxSGDB";
+            this.comboBoxSGDB.Size = new System.Drawing.Size(196, 23);
+            this.comboBoxSGDB.TabIndex = 19;
             // 
             // labelStatus
             // 
             this.labelStatus.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.labelStatus.Location = new System.Drawing.Point(0, 113);
+            this.labelStatus.Location = new System.Drawing.Point(0, 133);
             this.labelStatus.Name = "labelStatus";
             this.labelStatus.Size = new System.Drawing.Size(1126, 19);
             this.labelStatus.TabIndex = 17;
             this.labelStatus.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.labelStatus.TextChanged += new System.EventHandler(this.labelStatus_TextChanged);
-            // 
-            // buttonAbrirArquivo
-            // 
-            this.buttonAbrirArquivo.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
-            this.buttonAbrirArquivo.FlatAppearance.BorderSize = 2;
-            this.buttonAbrirArquivo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonAbrirArquivo.Image = global::DBSQLExport.Properties.Resources.opened_folder_24;
-            this.buttonAbrirArquivo.Location = new System.Drawing.Point(342, 66);
-            this.buttonAbrirArquivo.Margin = new System.Windows.Forms.Padding(4);
-            this.buttonAbrirArquivo.Name = "buttonAbrirArquivo";
-            this.buttonAbrirArquivo.Size = new System.Drawing.Size(32, 32);
-            this.buttonAbrirArquivo.TabIndex = 16;
-            this.buttonAbrirArquivo.UseVisualStyleBackColor = true;
-            this.buttonAbrirArquivo.Click += new System.EventHandler(this.buttonAbrirArquivo_Click);
             // 
             // label7
             // 
@@ -255,6 +293,147 @@ namespace DBSQLExport
             this.textBoxUsuario.TabIndex = 2;
             this.textBoxUsuario.Text = "SYSDBA";
             // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(0, 152);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4);
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.listBox1);
+            this.splitContainer1.Panel1.Controls.Add(this.textBoxSQLQuery);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.dataGridViewDados);
+            this.splitContainer1.Size = new System.Drawing.Size(1126, 307);
+            this.splitContainer1.SplitterDistance = 328;
+            this.splitContainer1.TabIndex = 1;
+            // 
+            // listBox1
+            // 
+            this.listBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.ItemHeight = 15;
+            this.listBox1.Location = new System.Drawing.Point(0, 0);
+            this.listBox1.Margin = new System.Windows.Forms.Padding(4);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(228, 307);
+            this.listBox1.TabIndex = 0;
+            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
+            // 
+            // textBoxSQLQuery
+            // 
+            this.textBoxSQLQuery.Dock = System.Windows.Forms.DockStyle.Right;
+            this.textBoxSQLQuery.Font = new System.Drawing.Font("Verdana", 9.25F);
+            this.textBoxSQLQuery.Location = new System.Drawing.Point(228, 0);
+            this.textBoxSQLQuery.Multiline = true;
+            this.textBoxSQLQuery.Name = "textBoxSQLQuery";
+            this.textBoxSQLQuery.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.textBoxSQLQuery.Size = new System.Drawing.Size(100, 307);
+            this.textBoxSQLQuery.TabIndex = 1;
+            this.textBoxSQLQuery.Visible = false;
+            // 
+            // dataGridViewDados
+            // 
+            this.dataGridViewDados.AllowUserToAddRows = false;
+            this.dataGridViewDados.AllowUserToDeleteRows = false;
+            this.dataGridViewDados.BackgroundColor = System.Drawing.SystemColors.Window;
+            this.dataGridViewDados.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewDados.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridViewDados.Location = new System.Drawing.Point(0, 0);
+            this.dataGridViewDados.Margin = new System.Windows.Forms.Padding(4);
+            this.dataGridViewDados.Name = "dataGridViewDados";
+            this.dataGridViewDados.ReadOnly = true;
+            this.dataGridViewDados.Size = new System.Drawing.Size(794, 307);
+            this.dataGridViewDados.TabIndex = 0;
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.buttonSQLQuery);
+            this.panel2.Controls.Add(this.button2);
+            this.panel2.Controls.Add(this.label9);
+            this.panel2.Controls.Add(this.textBoxPastaExportar);
+            this.panel2.Controls.Add(this.label8);
+            this.panel2.Controls.Add(this.textBoxSeparador);
+            this.panel2.Controls.Add(this.buttonTabela);
+            this.panel2.Controls.Add(this.buttonExportarTodasTabelas);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel2.Location = new System.Drawing.Point(0, 459);
+            this.panel2.Margin = new System.Windows.Forms.Padding(4);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(1126, 101);
+            this.panel2.TabIndex = 2;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(11, 4);
+            this.label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(87, 17);
+            this.label9.TabIndex = 15;
+            this.label9.Text = "Pasta Destino";
+            // 
+            // textBoxPastaExportar
+            // 
+            this.textBoxPastaExportar.Location = new System.Drawing.Point(11, 22);
+            this.textBoxPastaExportar.Margin = new System.Windows.Forms.Padding(4);
+            this.textBoxPastaExportar.Name = "textBoxPastaExportar";
+            this.textBoxPastaExportar.Size = new System.Drawing.Size(265, 24);
+            this.textBoxPastaExportar.TabIndex = 14;
+            this.textBoxPastaExportar.Text = "\\Exportado";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(324, 6);
+            this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(70, 17);
+            this.label8.TabIndex = 13;
+            this.label8.Text = "Separador";
+            // 
+            // textBoxSeparador
+            // 
+            this.textBoxSeparador.Location = new System.Drawing.Point(324, 24);
+            this.textBoxSeparador.Margin = new System.Windows.Forms.Padding(4);
+            this.textBoxSeparador.Name = "textBoxSeparador";
+            this.textBoxSeparador.Size = new System.Drawing.Size(112, 24);
+            this.textBoxSeparador.TabIndex = 12;
+            this.textBoxSeparador.Text = ";";
+            // 
+            // buttonExecutaQuery
+            // 
+            this.buttonExecutaQuery.Enabled = false;
+            this.buttonExecutaQuery.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
+            this.buttonExecutaQuery.FlatAppearance.BorderSize = 2;
+            this.buttonExecutaQuery.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExecutaQuery.Image = global::DBSQLExport.Properties.Resources.arrowright;
+            this.buttonExecutaQuery.Location = new System.Drawing.Point(174, 101);
+            this.buttonExecutaQuery.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonExecutaQuery.Name = "buttonExecutaQuery";
+            this.buttonExecutaQuery.Size = new System.Drawing.Size(32, 32);
+            this.buttonExecutaQuery.TabIndex = 22;
+            this.buttonExecutaQuery.UseVisualStyleBackColor = true;
+            this.buttonExecutaQuery.Click += new System.EventHandler(this.buttonExecutaQuery_Click);
+            // 
+            // buttonAbrirArquivo
+            // 
+            this.buttonAbrirArquivo.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
+            this.buttonAbrirArquivo.FlatAppearance.BorderSize = 2;
+            this.buttonAbrirArquivo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonAbrirArquivo.Image = global::DBSQLExport.Properties.Resources.opened_folder_24;
+            this.buttonAbrirArquivo.Location = new System.Drawing.Point(342, 66);
+            this.buttonAbrirArquivo.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonAbrirArquivo.Name = "buttonAbrirArquivo";
+            this.buttonAbrirArquivo.Size = new System.Drawing.Size(32, 32);
+            this.buttonAbrirArquivo.TabIndex = 16;
+            this.buttonAbrirArquivo.UseVisualStyleBackColor = true;
+            this.buttonAbrirArquivo.Click += new System.EventHandler(this.buttonAbrirArquivo_Click);
+            // 
             // buttonConectar
             // 
             this.buttonConectar.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
@@ -273,83 +452,24 @@ namespace DBSQLExport
             this.buttonConectar.UseVisualStyleBackColor = true;
             this.buttonConectar.Click += new System.EventHandler(this.buttonConectar_Click);
             // 
-            // buttonExportarTodasTabelas
+            // buttonSQLQuery
             // 
-            this.buttonExportarTodasTabelas.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
-            this.buttonExportarTodasTabelas.FlatAppearance.BorderSize = 2;
-            this.buttonExportarTodasTabelas.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonExportarTodasTabelas.Image = global::DBSQLExport.Properties.Resources.symlink_directory_48;
-            this.buttonExportarTodasTabelas.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonExportarTodasTabelas.Location = new System.Drawing.Point(831, 8);
-            this.buttonExportarTodasTabelas.Margin = new System.Windows.Forms.Padding(4);
-            this.buttonExportarTodasTabelas.Name = "buttonExportarTodasTabelas";
-            this.buttonExportarTodasTabelas.Padding = new System.Windows.Forms.Padding(15, 0, 30, 0);
-            this.buttonExportarTodasTabelas.Size = new System.Drawing.Size(284, 86);
-            this.buttonExportarTodasTabelas.TabIndex = 0;
-            this.buttonExportarTodasTabelas.Text = "Exportar Todas as Tabelas";
-            this.buttonExportarTodasTabelas.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.buttonExportarTodasTabelas.UseVisualStyleBackColor = true;
-            this.buttonExportarTodasTabelas.Click += new System.EventHandler(this.buttonExportarTabelas_Click);
-            // 
-            // splitContainer1
-            // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 132);
-            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4);
-            this.splitContainer1.Name = "splitContainer1";
-            // 
-            // splitContainer1.Panel1
-            // 
-            this.splitContainer1.Panel1.Controls.Add(this.listBox1);
-            // 
-            // splitContainer1.Panel2
-            // 
-            this.splitContainer1.Panel2.Controls.Add(this.dataGridViewDados);
-            this.splitContainer1.Size = new System.Drawing.Size(1126, 327);
-            this.splitContainer1.SplitterDistance = 206;
-            this.splitContainer1.TabIndex = 1;
-            // 
-            // listBox1
-            // 
-            this.listBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 15;
-            this.listBox1.Location = new System.Drawing.Point(0, 0);
-            this.listBox1.Margin = new System.Windows.Forms.Padding(4);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(206, 327);
-            this.listBox1.TabIndex = 0;
-            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
-            // 
-            // dataGridViewDados
-            // 
-            this.dataGridViewDados.AllowUserToAddRows = false;
-            this.dataGridViewDados.AllowUserToDeleteRows = false;
-            this.dataGridViewDados.BackgroundColor = System.Drawing.SystemColors.Window;
-            this.dataGridViewDados.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewDados.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridViewDados.Location = new System.Drawing.Point(0, 0);
-            this.dataGridViewDados.Margin = new System.Windows.Forms.Padding(4);
-            this.dataGridViewDados.Name = "dataGridViewDados";
-            this.dataGridViewDados.ReadOnly = true;
-            this.dataGridViewDados.Size = new System.Drawing.Size(916, 327);
-            this.dataGridViewDados.TabIndex = 0;
-            // 
-            // panel2
-            // 
-            this.panel2.Controls.Add(this.button2);
-            this.panel2.Controls.Add(this.label9);
-            this.panel2.Controls.Add(this.textBoxPastaExportar);
-            this.panel2.Controls.Add(this.label8);
-            this.panel2.Controls.Add(this.textBoxSeparador);
-            this.panel2.Controls.Add(this.button1);
-            this.panel2.Controls.Add(this.buttonExportarTodasTabelas);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(0, 459);
-            this.panel2.Margin = new System.Windows.Forms.Padding(4);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1126, 101);
-            this.panel2.TabIndex = 2;
+            this.buttonSQLQuery.Enabled = false;
+            this.buttonSQLQuery.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
+            this.buttonSQLQuery.FlatAppearance.BorderSize = 2;
+            this.buttonSQLQuery.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonSQLQuery.Image = global::DBSQLExport.Properties.Resources.symlink_directory_48;
+            this.buttonSQLQuery.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonSQLQuery.Location = new System.Drawing.Point(451, 8);
+            this.buttonSQLQuery.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonSQLQuery.Name = "buttonSQLQuery";
+            this.buttonSQLQuery.Padding = new System.Windows.Forms.Padding(15, 0, 50, 0);
+            this.buttonSQLQuery.Size = new System.Drawing.Size(216, 86);
+            this.buttonSQLQuery.TabIndex = 19;
+            this.buttonSQLQuery.Text = "SQL Query";
+            this.buttonSQLQuery.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buttonSQLQuery.UseVisualStyleBackColor = true;
+            this.buttonSQLQuery.Click += new System.EventHandler(this.buttonSQLQuery_Click);
             // 
             // button2
             // 
@@ -357,7 +477,7 @@ namespace DBSQLExport
             this.button2.FlatAppearance.BorderSize = 2;
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button2.Image = global::DBSQLExport.Properties.Resources.opened_folder_24;
-            this.button2.Location = new System.Drawing.Point(379, 14);
+            this.button2.Location = new System.Drawing.Point(284, 16);
             this.button2.Margin = new System.Windows.Forms.Padding(4);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(32, 32);
@@ -365,81 +485,41 @@ namespace DBSQLExport
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.buttonFolderExport_Click);
             // 
-            // label9
+            // buttonTabela
             // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(11, 4);
-            this.label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(87, 17);
-            this.label9.TabIndex = 15;
-            this.label9.Text = "Pasta Destino";
+            this.buttonTabela.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
+            this.buttonTabela.FlatAppearance.BorderSize = 2;
+            this.buttonTabela.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonTabela.Image = global::DBSQLExport.Properties.Resources.symlink_directory_48;
+            this.buttonTabela.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonTabela.Location = new System.Drawing.Point(675, 8);
+            this.buttonTabela.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonTabela.Name = "buttonTabela";
+            this.buttonTabela.Padding = new System.Windows.Forms.Padding(15, 0, 20, 0);
+            this.buttonTabela.Size = new System.Drawing.Size(216, 86);
+            this.buttonTabela.TabIndex = 1;
+            this.buttonTabela.Text = "Tabela Selecionada";
+            this.buttonTabela.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buttonTabela.UseVisualStyleBackColor = true;
+            this.buttonTabela.Click += new System.EventHandler(this.buttonExportarSelecionada_Click);
             // 
-            // textBoxPastaExportar
+            // buttonExportarTodasTabelas
             // 
-            this.textBoxPastaExportar.Location = new System.Drawing.Point(11, 22);
-            this.textBoxPastaExportar.Margin = new System.Windows.Forms.Padding(4);
-            this.textBoxPastaExportar.Name = "textBoxPastaExportar";
-            this.textBoxPastaExportar.Size = new System.Drawing.Size(360, 24);
-            this.textBoxPastaExportar.TabIndex = 14;
-            this.textBoxPastaExportar.Text = "\\Exportado";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(419, 4);
-            this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(70, 17);
-            this.label8.TabIndex = 13;
-            this.label8.Text = "Separador";
-            // 
-            // textBoxSeparador
-            // 
-            this.textBoxSeparador.Location = new System.Drawing.Point(419, 22);
-            this.textBoxSeparador.Margin = new System.Windows.Forms.Padding(4);
-            this.textBoxSeparador.Name = "textBoxSeparador";
-            this.textBoxSeparador.Size = new System.Drawing.Size(112, 24);
-            this.textBoxSeparador.TabIndex = 12;
-            this.textBoxSeparador.Text = ";";
-            // 
-            // button1
-            // 
-            this.button1.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
-            this.button1.FlatAppearance.BorderSize = 2;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Image = global::DBSQLExport.Properties.Resources.symlink_directory_48;
-            this.button1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button1.Location = new System.Drawing.Point(539, 8);
-            this.button1.Margin = new System.Windows.Forms.Padding(4);
-            this.button1.Name = "button1";
-            this.button1.Padding = new System.Windows.Forms.Padding(15, 0, 30, 0);
-            this.button1.Size = new System.Drawing.Size(284, 86);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "Exportar Tabela Selecionada";
-            this.button1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.buttonExportarSelecionada_Click);
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(501, 52);
-            this.label10.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(98, 17);
-            this.label10.TabIndex = 18;
-            this.label10.Text = "Driver Conexão";
-            // 
-            // comboBoxSGDB
-            // 
-            this.comboBoxSGDB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxSGDB.FormattingEnabled = true;
-            this.comboBoxSGDB.Location = new System.Drawing.Point(501, 74);
-            this.comboBoxSGDB.Margin = new System.Windows.Forms.Padding(4);
-            this.comboBoxSGDB.Name = "comboBoxSGDB";
-            this.comboBoxSGDB.Size = new System.Drawing.Size(196, 23);
-            this.comboBoxSGDB.TabIndex = 19;
+            this.buttonExportarTodasTabelas.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
+            this.buttonExportarTodasTabelas.FlatAppearance.BorderSize = 2;
+            this.buttonExportarTodasTabelas.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExportarTodasTabelas.Image = global::DBSQLExport.Properties.Resources.symlink_directory_48;
+            this.buttonExportarTodasTabelas.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonExportarTodasTabelas.Location = new System.Drawing.Point(899, 8);
+            this.buttonExportarTodasTabelas.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonExportarTodasTabelas.Name = "buttonExportarTodasTabelas";
+            this.buttonExportarTodasTabelas.Padding = new System.Windows.Forms.Padding(15, 0, 30, 0);
+            this.buttonExportarTodasTabelas.Size = new System.Drawing.Size(216, 86);
+            this.buttonExportarTodasTabelas.TabIndex = 0;
+            this.buttonExportarTodasTabelas.Text = "Todas as Tabelas";
+            this.buttonExportarTodasTabelas.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buttonExportarTodasTabelas.UseVisualStyleBackColor = true;
+            this.buttonExportarTodasTabelas.Click += new System.EventHandler(this.buttonExportarTabelas_Click);
             // 
             // Form1
             // 
@@ -459,6 +539,7 @@ namespace DBSQLExport
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel1.PerformLayout();
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
@@ -494,7 +575,7 @@ namespace DBSQLExport
         private System.Windows.Forms.TextBox textBoxServidor;
         private System.Windows.Forms.Button buttonAbrirArquivo;
         private System.Windows.Forms.Label labelStatus;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button buttonTabela;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox textBoxPastaExportar;
         private System.Windows.Forms.Label label8;
@@ -502,6 +583,11 @@ namespace DBSQLExport
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.ComboBox comboBoxSGDB;
+        private System.Windows.Forms.Button buttonSQLQuery;
+        private System.Windows.Forms.TextBox textBoxSQLQuery;
+        private System.Windows.Forms.RadioButton radioButton2;
+        private System.Windows.Forms.RadioButton radioButton1;
+        private System.Windows.Forms.Button buttonExecutaQuery;
     }
 }
 

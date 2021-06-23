@@ -15,8 +15,10 @@ namespace DBSQLExport
 {
     public partial class Form1 : Form
     {
+        Random r;
         public Form1()
         {
+            r = new Random();
             InitializeComponent();
             textBoxPastaExportar.Text = Application.StartupPath + "\\Exportado\\";
         }
@@ -370,6 +372,126 @@ WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA='" + schema + "';";
         {
             comboBoxSGDB.DataSource = Enum.GetValues(typeof(BancosDeDados));
 
+        }
+
+
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButton1.Checked)
+            {
+                listBox1.Visible = true;
+                textBoxSQLQuery.Visible = false;
+                buttonTabela.Enabled = true;
+                buttonExportarTodasTabelas.Enabled = true;
+                buttonSQLQuery.Enabled = false;
+                buttonExecutaQuery.Enabled = false;
+            }
+            else
+            {
+                listBox1.Visible = false;
+                textBoxSQLQuery.Visible = true;
+                buttonTabela.Enabled = false;
+                buttonExportarTodasTabelas.Enabled = false;
+                buttonSQLQuery.Enabled = true;
+                buttonExecutaQuery.Enabled = true;
+                textBoxSQLQuery.Dock = DockStyle.Fill;
+            }
+        }
+
+        private void buttonExecutaQuery_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                BancosDeDados sgdb = (BancosDeDados)comboBoxSGDB.SelectedItem;
+
+
+                string table = listBox1.SelectedItem?.ToString();
+                if (!String.IsNullOrWhiteSpace(table))
+                {
+                    DataSet ds = new DataSet();
+                    using (IDbConnection conexao = GetConnection(sgdb, textBoxUsuario.Text, textBoxDatabase.Text, textBoxServidor.Text, textBoxSenha.Text, textBoxPorta.Text, textBoxDialect.Text, textBoxCharSet.Text)) // new FbConnection(GetConnectionString()))
+                    {
+                        conexao.Open();
+
+                        string sql = textBoxSQLQuery.Text;
+                        using (IDbCommand cmd = GetCommand(sgdb, sql)) // new FbCommand(sql, conexao))
+                        {
+                            if (cmd != null)
+                            {
+                                cmd.Connection = conexao;
+                                IDbDataAdapter da = GetDbAdaptaer(sgdb, cmd);
+                                da.Fill(ds);
+                            }
+                        }
+                    }
+                    dataGridViewDados.DataSource = ds.Tables[0];
+
+                    labelStatus.Text = ds.Tables[0].Rows.Count + " Registros carregados";
+                }
+                else
+                {
+                    labelStatus.Text = "";
+                }
+            }
+            catch (Exception ex)
+            {
+                labelStatus.Text = "Erro ao carregar tabela: Erro: " + ex.Message;
+            }
+        }
+
+        private void buttonSQLQuery_Click(object sender, EventArgs e)
+        {
+            BancosDeDados sgdb = (BancosDeDados)comboBoxSGDB.SelectedItem;
+
+            using (IDbConnection conexao = GetConnection(sgdb, textBoxUsuario.Text, textBoxDatabase.Text, textBoxServidor.Text, textBoxSenha.Text, textBoxPorta.Text, textBoxDialect.Text, textBoxCharSet.Text)) // new FbConnection(GetConnectionString()))
+            {
+                conexao.Open();
+                DataSet ds = new DataSet();
+                string sql = textBoxSQLQuery.Text;
+                using (IDbCommand cmd = GetCommand(sgdb, sql))// new FbCommand(sql, conexao))
+                {
+                    if (cmd != null)
+                    {
+
+                        cmd.Connection = conexao;
+
+                        FileInfo fileSaida = new FileInfo(Path.Combine(textBoxPastaExportar.Text,"CustomQuery"+ DateTime.Now.ToString("yy-MM-ddHHmmssttt")  + ".csv"));
+                        if (!fileSaida.Directory.Exists)
+                            fileSaida.Directory.Create();
+
+                        if (fileSaida.Exists)
+                            fileSaida.Delete();
+
+                        string s = textBoxSeparador.Text;
+                        using (TextWriter tw = new StreamWriter(fileSaida.FullName, false, Encoding.Default))
+                        {
+                            using (IDataReader dr = cmd.ExecuteReader())
+                            {
+                                for (int i = 0; i < dr.FieldCount; i++)
+                                {
+                                    tw.Write(dr.GetName(i) + s);
+                                }
+                                tw.WriteLine();
+
+                                while (dr.Read())
+                                {
+                                    for (int i = 0; i < dr.FieldCount; i++)
+                                    {
+                                        //if (dr[i] == null || dr.IsDBNull(i))
+                                        //    tw.Write("" + s);
+                                        //else
+                                        tw.Write((dr[i]?.ToString().Replace("\r", "").Replace("\n", "") ?? "") + s);
+                                    }
+                                    tw.WriteLine();
+                                }
+                            }
+
+                            tw.Close();
+
+                        }
+                    }
+                }
+            }
         }
     }
 }
