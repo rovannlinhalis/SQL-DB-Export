@@ -81,6 +81,7 @@ namespace DBSQLExport
             {
                 cmd = new System.Data.Odbc.OdbcCommand(query);
             }
+            cmd.CommandTimeout = 180000;
             return cmd;
         }
         public static IDbDataAdapter GetDbAdaptaer(BancosDeDados db,  IDbCommand cmd)
