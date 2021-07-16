@@ -252,7 +252,8 @@ WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA='" + schema + "';";
                                         //if (dr[i] == null || dr.IsDBNull(i))
                                         //    tw.Write("" + s);
                                         //else
-                                            tw.Write((dr[i]?.ToString().Replace("\r", "").Replace("\n", "") ?? "") + s);
+
+                                            tw.Write((dr[i]?.ToString().Replace("\r", "").Replace("\n", "").Replace(s,"/") ?? "") + s);
                                     }
                                     tw.WriteLine();
                                 }
@@ -481,7 +482,7 @@ WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA='" + schema + "';";
                                         //if (dr[i] == null || dr.IsDBNull(i))
                                         //    tw.Write("" + s);
                                         //else
-                                        tw.Write((dr[i]?.ToString().Replace("\r", "").Replace("\n", "") ?? "") + s);
+                                        tw.Write((dr[i]?.ToString().Replace("\r", "").Replace("\n", "").Replace(s, "/") ?? "") + s);
                                     }
                                     tw.WriteLine();
                                 }
